@@ -1,2 +1,3 @@
 # HAMM
-Healthcare Administration and Medical Management 
+
+Healthcare Administration and Medical Management
