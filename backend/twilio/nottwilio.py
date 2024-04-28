@@ -17,14 +17,13 @@ def send_message(input):
     message = client.messages \
         .create(
             body=f'{input}',
-            from_='++18888948030',
+            from_='+18888948030',
             #media_url=['https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg'],
-            to='+1877780436'
+            to='+18777804236'
         )
  
     
     return print(message.sid) 
 
 message = input("What is your message")
-
 send_message(message)
