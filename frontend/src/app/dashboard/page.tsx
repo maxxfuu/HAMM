@@ -12,6 +12,18 @@ import {
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
+import { CopyButton } from '@/components/copy-button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -23,7 +35,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -51,9 +62,9 @@ export default async function DashboardPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Notes</CardTitle>
+          <CardTitle>Meeting Notes</CardTitle>
           <CardDescription>
-            View past notes from previous Zoom meetings
+            View and manage notes from past Zoom meetings
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -72,7 +83,7 @@ export default async function DashboardPage() {
                 </TableHead>
                 <TableHead>
                   <div className="flex items-center">
-                    <TagIcon className="mr-1 size-4" /> Name
+                    <TagIcon className="mr-2 size-4" /> Name
                   </div>
                 </TableHead>
                 <TableHead className="text-right">
@@ -94,15 +105,36 @@ export default async function DashboardPage() {
                   Random placeholder
                 </TableCell>
                 <TableCell className="space-x-2 whitespace-nowrap text-right">
-                  <Button size="icon">
-                    <EyeIcon className="size-4" />
+                  <Button>
+                    <EyeIcon className="mr-2 size-4" /> View
                   </Button>
-                  <Button className="border" variant="secondary" size="icon">
-                    <ClipboardCopyIcon className="size-4" />
-                  </Button>
-                  <Button variant="destructive" size="icon">
-                    <TrashIcon className="size-4" />
-                  </Button>
+                  <CopyButton text="adsklasd" />
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="icon">
+                        <TrashIcon className="size-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete the notes for this meeting.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogAction className="w-full bg-red-500 hover:bg-red-400">
+                          Yes, I&apos;m sure
+                        </AlertDialogAction>
+                        <AlertDialogCancel className="w-full">
+                          Cancel
+                        </AlertDialogCancel>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             </TableBody>
