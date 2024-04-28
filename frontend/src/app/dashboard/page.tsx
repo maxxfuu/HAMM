@@ -1,15 +1,17 @@
 import { getPropelAuthApis } from '@propelauth/nextjs/server';
 import { getUserOrRedirect } from '@propelauth/nextjs/server/app-router';
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+
+export const metadata: Metadata = { title: 'Dashboard' };
 
 export default async function DashboardPage() {
   const user = await getUserOrRedirect();
