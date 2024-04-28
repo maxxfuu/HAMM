@@ -1,10 +1,17 @@
+import { AuthProvider } from '@propelauth/nextjs/client';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 import type { PropsWithChildren } from 'react';
+import { Toaster } from 'sonner';
 
+import { env } from '@/env';
 import { cn } from '@/lib/utils';
+import { Header } from './_components/header';
 
 import './globals.css';
+
+import { GridBackground } from './_components/grid-background';
 
 export const metadata: Metadata = {
   title: 'HAMM',
@@ -16,11 +23,17 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'relative flex min-h-screen flex-col pb-8 font-sans antialiased',
           GeistSans.variable
         )}
       >
-        <main>{children}</main>
+        <GridBackground />
+        <AuthProvider authUrl={env.NEXT_PUBLIC_AUTH_URL}>
+          <Header />
+          <main className="container">{children}</main>
+        </AuthProvider>
+        <NextTopLoader color="#17A34A" showSpinner={false} />
+        <Toaster richColors />
       </body>
     </html>
   );
