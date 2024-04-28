@@ -1,6 +1,7 @@
 'use server';
 
 import { getUser } from '@propelauth/nextjs/server/app-router';
+import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '@/lib/db';
@@ -42,4 +43,16 @@ export async function createMeeting(
     .returning({ insertedId: meetings.id });
 
   return result[0].insertedId;
+}
+
+export async function deleteMeeting(meetingId: string) {
+  const user = await getUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+  await db
+    .delete(meetings)
+    .where(
+      and(eq(meetings.uploaderId, user.userId), eq(meetings.id, meetingId))
+    );
 }

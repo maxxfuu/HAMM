@@ -1,28 +1,20 @@
 import { getUserOrRedirect } from '@propelauth/nextjs/server/app-router';
+import { desc, eq } from 'drizzle-orm';
 import {
   ClockIcon,
+  CopyPlusIcon,
   EyeIcon,
-  HashIcon,
+  SquareActivityIcon,
   TagIcon,
-  TrashIcon,
   WrenchIcon
 } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { CopyButton } from '@/components/copy-button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Time } from '@/components/time';
+import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -38,12 +30,28 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { db } from '@/lib/db';
+import { meetings } from '@/lib/db/schema';
+import { DeleteDialog } from './_components/delete-dialog';
 import { UploadDialog } from './_components/upload-dialog';
 
 export const metadata: Metadata = { title: 'Dashboard' };
 
 export default async function DashboardPage() {
   const user = await getUserOrRedirect({ returnToCurrentPath: true });
+
+  const uploadedMeetings = await db.query.meetings.findMany({
+    where: eq(meetings.uploaderId, user.userId),
+    orderBy: desc(meetings.createdAt),
+    columns: {
+      id: true,
+      name: true,
+      patient: true,
+      status: true,
+      createdAt: true
+    }
+  });
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-1">
@@ -70,17 +78,17 @@ export default async function DashboardPage() {
               <TableRow>
                 <TableHead className="w-24">
                   <div className="flex items-center">
-                    <HashIcon className="mr-1 size-4" /> ID
-                  </div>
-                </TableHead>
-                <TableHead className="w-[1%]">
-                  <div className="flex items-center">
-                    <ClockIcon className="mr-1 size-4" /> Date
+                    <SquareActivityIcon className="mr-1 size-4" /> Status
                   </div>
                 </TableHead>
                 <TableHead>
                   <div className="flex items-center">
                     <TagIcon className="mr-2 size-4" /> Name
+                  </div>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center">
+                    <ClockIcon className="mr-1 size-4" /> Upload date
                   </div>
                 </TableHead>
                 <TableHead className="text-right">
@@ -90,54 +98,52 @@ export default async function DashboardPage() {
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="whitespace-nowrap font-medium">
-                  1
-                </TableCell>
-                <TableCell className="whitespace-nowrap">
-                  {new Date().toLocaleString()}
-                </TableCell>
-                <TableCell className="whitespace-nowrap">
-                  Random placeholder
-                </TableCell>
-                <TableCell className="space-x-2 whitespace-nowrap text-right">
-                  <Link
-                    className={buttonVariants({ variant: 'outline' })}
-                    href={`/meeting/${1}`}
-                  >
-                    <EyeIcon className="mr-2 size-4" /> View
-                  </Link>
-                  <CopyButton text="adsklasd" />
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="destructive" size="icon">
-                        <TrashIcon className="size-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the notes for this meeting.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogAction className="w-full bg-red-500 hover:bg-red-400">
-                          Yes, I&apos;m sure
-                        </AlertDialogAction>
-                        <AlertDialogCancel className="w-full">
-                          Cancel
-                        </AlertDialogCancel>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </TableCell>
-              </TableRow>
-            </TableBody>
+            {uploadedMeetings.length > 0 ? (
+              <TableBody>
+                {uploadedMeetings.map((meeting) => (
+                  <TableRow>
+                    <TableCell className="whitespace-nowrap font-medium">
+                      <Badge
+                        className="border-muted-foreground/25 font-normal uppercase tracking-wider"
+                        variant={
+                          meeting.status === 'analyzing'
+                            ? 'secondary'
+                            : 'default'
+                        }
+                      >
+                        {meeting.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      Random placeholder
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Time timestamp={meeting.createdAt} />
+                    </TableCell>
+                    <TableCell className="space-x-2 whitespace-nowrap text-right">
+                      <Link
+                        className={buttonVariants({ variant: 'outline' })}
+                        href={`/meeting/${meeting.id}`}
+                      >
+                        <EyeIcon className="mr-2 size-4" /> View
+                      </Link>
+                      <CopyButton
+                        text={`http://localhost:3000/meeting/${meeting.id}`}
+                      />
+                      <DeleteDialog meetingId={meeting.id} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            ) : (
+              <div className="relative mt-4 block w-full rounded-lg border-2 border-dashed border-muted-foreground/50 p-12 text-center">
+                <CopyPlusIcon className="mx-auto mb-3 size-12 text-muted-foreground" />
+                <h3 className="text-lg font-semibold">No meetings</h3>
+                <p className="text-sm text-muted-foreground">
+                  Get started by uploading your first meeting!
+                </p>
+              </div>
+            )}
           </Table>
         </CardContent>
       </Card>
