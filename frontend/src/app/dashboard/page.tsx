@@ -30,6 +30,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { env } from '@/env';
 import { db } from '@/lib/db';
 import { meetings } from '@/lib/db/schema';
 import { DeleteDialog } from './_components/delete-dialog';
@@ -128,7 +129,12 @@ export default async function DashboardPage() {
                         <EyeIcon className="mr-2 size-4" /> View
                       </Link>
                       <CopyButton
-                        text={`http://localhost:3000/meeting/${meeting.id}`}
+                        text={
+                          (env.NODE_ENV === 'development'
+                            ? 'http://localhost:3000'
+                            : 'https://hammsandwich.tech') +
+                          `/meeting/${meeting.id}`
+                        }
                       />
                       <DeleteDialog meetingId={meeting.id} />
                     </TableCell>
