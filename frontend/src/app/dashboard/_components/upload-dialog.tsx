@@ -9,6 +9,7 @@ import {
   TagIcon,
   UserIcon
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -42,6 +43,7 @@ const formSchema = z.object({
 });
 
 export function UploadDialog() {
+  const router = useRouter();
   const { accessToken } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,16 +72,18 @@ export function UploadDialog() {
     formData.append('meeting_id', meetingId);
     formData.append('file', values.file);
 
-    const response = await fetch('http://localhost:5000/upload', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      method: 'POST',
-      body: formData
-    });
-    if (!response.ok) {
-      throw new Error('Bad response from backend');
-    }
+    // const response = await fetch('http://localhost:5000/upload', {
+    //   headers: { Authorization: `Bearer ${accessToken}` },
+    //   method: 'POST',
+    //   body: formData
+    // });
+    // if (!response.ok) {
+    //   throw new Error('Bad response from backend');
+    // }
 
-    console.log('res', response);
+    // console.log('res', response);
+
+    router.push(`/meeting/${meetingId}`);
   };
 
   return (
@@ -97,7 +101,7 @@ export function UploadDialog() {
               toast.promise(handleSubmit(values), {
                 loading: 'Please wait...',
                 error: 'An unexpected error occurred.',
-                success: () => 'Your meeting has been submitted for processing!'
+                success: () => 'Your meeting is now processing!'
               })
             )}
           >
@@ -147,7 +151,12 @@ export function UploadDialog() {
                       <PhoneIcon className="mr-1 size-4" /> Phone Number
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="+12345678910" {...field} />
+                      <Input
+                        placeholder="+12345678910"
+                        minLength={12}
+                        maxLength={12}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
