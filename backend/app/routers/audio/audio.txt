@@ -1,0 +1,17 @@
+Speaker0: Brris bell button for video alerts. How are you doing today? I have been having trouble breathing lately.
+
+Speaker1: Have you had any type of cold lately?
+
+Speaker0: No. I haven't had a cold. I just have a heavy feeling in my chest when I try to breathe.
+
+Speaker1: Do you have any allergies that you know of?
+
+Speaker0: No. I don't have any allergies that I know of.
+
+Speaker1: Does this happen all the time? Or mostly when you are active.
+
+Speaker0: It happens a lot when I work out.
+
+Speaker1: I am going to send you to a pulmonary specialist who can run tests on you for asthma.
+
+Speaker0: Thank you for your help, doctor.

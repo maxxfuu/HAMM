@@ -1,15 +1,34 @@
-from typing import Union
+"""Main application and routing logic for the API."""
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import notes
+
+load_dotenv()
+
 
 app = FastAPI()
+app.include_router(notes.router)
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
+# Paths
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def read_root() -> dict[str, str]:
+    """Read root.
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    Returns
+    -------
+    dict[str, str]
+        Message
+    """
+    return {"message": "API"}

@@ -108,16 +108,15 @@ export default async function MeetingDataPage({
           </CardContent>
         </Card>
         <Card className="md:col-span-4">
-          <CardHeader className="pb-2">
+          <CardHeader>
             <CardTitle>Definitions</CardTitle>
           </CardHeader>
-          <CardContent className="pb-2">
+          <CardContent>
             <Accordion className="divide-y" type="multiple">
               {meeting.definitions?.map((entry) => (
-                <AccordionItem key={entry.term} value={entry.term}>
-                  <AccordionTrigger>{entry.term}</AccordionTrigger>
-                  <AccordionContent>{entry.definition}</AccordionContent>
-                </AccordionItem>
+                <p className="text-sm text-muted-foreground" key={entry.term}>
+                  {entry.definition}
+                </p>
               ))}
             </Accordion>
           </CardContent>

@@ -76,7 +76,7 @@ export function UploadDialog() {
     const response = await fetch(
       (env.NODE_ENV === 'development'
         ? 'http://localhost:8000'
-        : 'https://hammsandwich.tech') + '/upload',
+        : 'https://hammsandwich.tech') + '/notes',
       {
         headers: { Authorization: `Bearer ${accessToken}` },
         method: 'POST',
