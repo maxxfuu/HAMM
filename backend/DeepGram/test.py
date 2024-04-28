@@ -5,19 +5,10 @@
 from deepgram import Deepgram
 import asyncio, json, os
 
-'''
- Sign up at https://dpgr.am/7407694
- to get an API key and 45,000 minutes
- for free!
-'''
 dg_key = '6d3cd245d8f874f4424f704a02568d2e51e3cf69'
 dg = Deepgram(dg_key)
 
-'''
-The most common audio formats and encodings we support
-include mp3, mp4, mp2, aac, wav, flac, pcm, m4a, ogg, opus, and webm,
-So feel free to adjust the `MIMETYPE` variable as needed
-'''
+
 MIMETYPE = 'mp3'
 
 #Note: You can use '.' if your audio is in the root
