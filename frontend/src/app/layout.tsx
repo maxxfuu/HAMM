@@ -7,11 +7,10 @@ import { Toaster } from 'sonner';
 
 import { env } from '@/env';
 import { cn } from '@/lib/utils';
+import { BackgroundEffects } from './_components/background-effects';
 import { Header } from './_components/header';
 
 import './globals.css';
-
-import { BackgroundEffects } from './_components/background-effects';
 
 export const metadata: Metadata = {
   title: {

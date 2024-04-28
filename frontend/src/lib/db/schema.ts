@@ -1,9 +1,11 @@
 import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-export const notes = sqliteTable('notes', {
+export const meetings = sqliteTable('meetings', {
   id: text('id').primaryKey(),
-  userId: text('user_id').notNull(),
+  uploaderId: text('uploader_id').notNull(),
+  name: text('name').notNull(),
+  patient: text('patient').notNull(),
   createdAt: integer('created_at')
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull()
