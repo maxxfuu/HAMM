@@ -13,9 +13,15 @@ export function HeroSection() {
         adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua.
       </p>
-      <div>
+      <div className="flex justify-center gap-2">
         <Link className={buttonVariants()} href="/dashboard">
           Get started
+        </Link>
+        <Link
+          className={buttonVariants({ variant: 'outline' })}
+          href="/dashboard"
+        >
+          Dashboard
         </Link>
       </div>
     </section>

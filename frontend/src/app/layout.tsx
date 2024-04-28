@@ -30,7 +30,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <GridBackground />
         <AuthProvider authUrl={env.NEXT_PUBLIC_AUTH_URL}>
           <Header />
-          <main className="container">{children}</main>
+          <main className="container flex-1">{children}</main>
         </AuthProvider>
         <NextTopLoader color="#17A34A" showSpinner={false} />
         <Toaster richColors />
