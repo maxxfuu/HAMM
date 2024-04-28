@@ -29,7 +29,7 @@ export function DeleteDialog({ meetingId }: DeleteDialogProps) {
     await deleteMeeting(meetingId);
     toast.success('Meeting deleted!');
     router.refresh();
-  };
+  }; 
 
   return (
     <AlertDialog>
