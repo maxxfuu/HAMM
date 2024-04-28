@@ -1,11 +1,25 @@
+import { getPropelAuthApis } from '@propelauth/nextjs/server';
 import { eq } from 'drizzle-orm';
-import { Loader2Icon } from 'lucide-react';
+import {
+  BriefcaseMedicalIcon,
+  ClockIcon,
+  Loader2Icon,
+  UserIcon
+} from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
 import { AutoRefresher } from '@/components/auto-refresher';
+import { Time } from '@/components/time';
 import { buttonVariants } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { db } from '@/lib/db';
 import { meetings } from '@/lib/db/schema';
 
@@ -29,8 +43,14 @@ export default async function MeetingDataPage({
     notFound();
   }
 
+  const propel = getPropelAuthApis();
+  const uploader = await propel.fetchUserMetadataByUserId(meeting.uploaderId);
+  if (!uploader) {
+    notFound();
+  }
+
   // still processing
-  if (meeting.status !== 'processed') {
+  if (meeting.status !== 'processed' && false) {
     return (
       <>
         <AutoRefresher />
@@ -56,9 +76,46 @@ export default async function MeetingDataPage({
   }
 
   return (
-    <div>
-      <p>Meeting data page</p>
-      <p>Meeting id: {params.id}</p>
+    <div className="grid gap-6">
+      <div className="grid gap-1">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {meeting.name}
+        </h1>
+        <div className="flex items-center text-muted-foreground">
+          <ClockIcon className="mr-1 size-4" />{' '}
+          <Time timestamp={meeting.createdAt} />
+        </div>
+        <div>
+          <div className="flex items-center text-muted-foreground">
+            <BriefcaseMedicalIcon className="mr-1 size-4" />{' '}
+            <strong>Doctor</strong>: {uploader.firstName} {uploader.lastName}
+          </div>
+          <div className="flex items-center text-muted-foreground">
+            <UserIcon className="mr-1 size-4" /> <strong>Patient</strong>:{' '}
+            {meeting.patient}
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-12 gap-6">
+        <Card className="col-span-8">
+          <CardHeader>
+            <CardTitle>Summary</CardTitle>
+            <CardDescription>Card Description</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Card Content</p>
+          </CardContent>
+        </Card>
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Definitions</CardTitle>
+            <CardDescription>Card Description</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Card Content</p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
