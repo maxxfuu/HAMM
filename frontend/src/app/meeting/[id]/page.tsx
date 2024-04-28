@@ -77,27 +77,29 @@ export default async function MeetingDataPage({
 
   return (
     <div className="grid gap-6">
-      <div className="grid gap-1">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {meeting.name}
-        </h1>
-        <div className="flex items-center text-muted-foreground">
-          <ClockIcon className="mr-1 size-4" />{' '}
-          <Time timestamp={meeting.createdAt} />
+      <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="grid gap-1">
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {meeting.name}
+          </h1>
+          <div className="flex items-center justify-center text-muted-foreground sm:justify-start">
+            <ClockIcon className="mr-1 size-4" />{' '}
+            <Time timestamp={meeting.createdAt} />
+          </div>
         </div>
         <div>
-          <div className="flex items-center text-muted-foreground">
-            <BriefcaseMedicalIcon className="mr-1 size-4" />{' '}
-            <strong>Doctor</strong>: {uploader.firstName} {uploader.lastName}
-          </div>
-          <div className="flex items-center text-muted-foreground">
+          <div className="flex items-center justify-end text-muted-foreground">
             <UserIcon className="mr-1 size-4" /> <strong>Patient</strong>:{' '}
             {meeting.patient}
           </div>
+          <div className="flex items-center justify-end text-muted-foreground">
+            <BriefcaseMedicalIcon className="mr-1 size-4" />{' '}
+            <strong>Doctor</strong>: {uploader.firstName} {uploader.lastName}
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-12 gap-6">
-        <Card className="col-span-8">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <Card className="md:col-span-8">
           <CardHeader>
             <CardTitle>Summary</CardTitle>
             <CardDescription>Card Description</CardDescription>
@@ -106,7 +108,7 @@ export default async function MeetingDataPage({
             <p>Card Content</p>
           </CardContent>
         </Card>
-        <Card className="col-span-4">
+        <Card className="md:col-span-4">
           <CardHeader>
             <CardTitle>Definitions</CardTitle>
             <CardDescription>Card Description</CardDescription>
