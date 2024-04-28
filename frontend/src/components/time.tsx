@@ -5,7 +5,7 @@ interface TimeProps {
 }
 
 export function Time({ timestamp }: TimeProps) {
-  const dateObj = new Date(timestamp);
+  const dateObj = new Date(`${timestamp} UTC`);
   return (
     <time dateTime={dateObj.toISOString()} className="tabular-nums">
       {dateObj.toLocaleString()}

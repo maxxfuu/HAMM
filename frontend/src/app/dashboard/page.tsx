@@ -98,10 +98,10 @@ export default async function DashboardPage() {
                 </TableHead>
               </TableRow>
             </TableHeader>
-            {uploadedMeetings.length > 0 ? (
+            {uploadedMeetings.length > 0 && (
               <TableBody>
                 {uploadedMeetings.map((meeting) => (
-                  <TableRow>
+                  <TableRow key={meeting.id}>
                     <TableCell className="whitespace-nowrap font-medium">
                       <Badge
                         className="border-muted-foreground/25 font-normal uppercase tracking-wider"
@@ -115,7 +115,7 @@ export default async function DashboardPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
-                      Random placeholder
+                      {meeting.name}
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       <Time timestamp={meeting.createdAt} />
@@ -135,16 +135,17 @@ export default async function DashboardPage() {
                   </TableRow>
                 ))}
               </TableBody>
-            ) : (
-              <div className="relative mt-4 block w-full rounded-lg border-2 border-dashed border-muted-foreground/50 p-12 text-center">
-                <CopyPlusIcon className="mx-auto mb-3 size-12 text-muted-foreground" />
-                <h3 className="text-lg font-semibold">No meetings</h3>
-                <p className="text-sm text-muted-foreground">
-                  Get started by uploading your first meeting!
-                </p>
-              </div>
             )}
           </Table>
+          {uploadedMeetings.length === 0 && (
+            <div className="relative mt-4 block w-full rounded-lg border-2 border-dashed border-muted-foreground/50 p-12 text-center">
+              <CopyPlusIcon className="mx-auto mb-3 size-12 text-muted-foreground" />
+              <h3 className="text-lg font-semibold">No meetings</h3>
+              <p className="text-sm text-muted-foreground">
+                Get started by uploading your first meeting!
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
