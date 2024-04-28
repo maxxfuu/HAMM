@@ -19,13 +19,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 import { buttonVariants } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/lib/db';
 import { meetings } from '@/lib/db/schema';
 
@@ -56,7 +50,7 @@ export default async function MeetingDataPage({
   }
 
   // still processing
-  if (meeting.status !== 'processed' && false) {
+  if (meeting.status !== 'processed') {
     return (
       <>
         <AutoRefresher />
@@ -110,7 +104,7 @@ export default async function MeetingDataPage({
             <CardTitle>Summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Card Content</p>
+            <p>{meeting.summary}</p>
           </CardContent>
         </Card>
         <Card className="md:col-span-4">
@@ -119,18 +113,12 @@ export default async function MeetingDataPage({
           </CardHeader>
           <CardContent className="pb-2">
             <Accordion className="divide-y" type="multiple">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
+              {meeting.definitions?.map((entry) => (
+                <AccordionItem key={entry.term} value={entry.term}>
+                  <AccordionTrigger>{entry.term}</AccordionTrigger>
+                  <AccordionContent>{entry.definition}</AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
           </CardContent>
         </Card>
