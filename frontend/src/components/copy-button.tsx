@@ -17,7 +17,7 @@ export function CopyButton({ text }: CopyButtonProps) {
       size="icon"
       onClick={() => {
         navigator.clipboard.writeText(text);
-        toast.success('Copied to clipboard!');
+        toast.success('Copied link to clipboard!');
       }}
     >
       <ClipboardCopyIcon className="size-4" />

@@ -1,7 +1,5 @@
-import { getPropelAuthApis } from '@propelauth/nextjs/server';
 import { getUserOrRedirect } from '@propelauth/nextjs/server/app-router';
 import {
-  ClipboardCopyIcon,
   ClockIcon,
   EyeIcon,
   HashIcon,
@@ -10,7 +8,6 @@ import {
   WrenchIcon
 } from 'lucide-react';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 import { CopyButton } from '@/components/copy-button';
 import {
@@ -40,18 +37,12 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { UploadDialog } from './_components/upload-dialog';
 
 export const metadata: Metadata = { title: 'Dashboard' };
 
 export default async function DashboardPage() {
-  const user = await getUserOrRedirect();
-  const propel = getPropelAuthApis();
-
-  const metadata = await propel.fetchUserMetadataByUserId(user.userId);
-  if (!metadata?.metadata?.zoom) {
-    throw redirect('/zoom/connect');
-  }
-
+  const user = await getUserOrRedirect({ returnToCurrentPath: true });
   return (
     <div className="grid gap-6">
       <div className="grid gap-1">
@@ -62,10 +53,15 @@ export default async function DashboardPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Meeting Notes</CardTitle>
-          <CardDescription>
-            View and manage notes from past Zoom meetings
-          </CardDescription>
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+            <div>
+              <CardTitle>Meeting Notes</CardTitle>
+              <CardDescription>
+                View and manage notes from past meetings
+              </CardDescription>
+            </div>
+            <UploadDialog />
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -105,7 +101,7 @@ export default async function DashboardPage() {
                   Random placeholder
                 </TableCell>
                 <TableCell className="space-x-2 whitespace-nowrap text-right">
-                  <Button>
+                  <Button variant="outline">
                     <EyeIcon className="mr-2 size-4" /> View
                   </Button>
                   <CopyButton text="adsklasd" />

@@ -17,6 +17,22 @@ Healthcare Administration and Medical Management
 
 ##### Frontend
 
+Install [Node.js](https://nodejs.org/en)
+
+Install dependencies
+
+```bash
+npm i
 ```
 
+Set environment variables
+
+```bash
+To run this project, you need to set the required environment variables. Create a new file called `.env` and fill in the values.
+```
+
+Start the local development server on http://localhost:3000
+
+```bash
+npm run dev
 ```

@@ -21,13 +21,9 @@ import { LogoutButton } from './logout-button';
 
 export async function Header() {
   const user = await getUser();
-
-  const navLinkClassName =
-    'block transition-color-transform hover:text-muted-foreground/80 active:scale-95';
-
   return (
-    <header className="container mb-4 flex flex-col">
-      <div className="flex h-14 justify-between">
+    <header className="container mb-6 flex flex-col border-b">
+      <div className="flex h-16 justify-between">
         <div className="flex items-center gap-4">
           <Link className="flex items-center gap-2" href="/">
             <HeartHandshakeIcon className="size-6 text-green-500" />
@@ -35,18 +31,6 @@ export async function Header() {
               HAMM
             </span>
           </Link>
-          {/* <ul className="hidden gap-4 text-sm text-muted-foreground sm:flex">
-            {[
-              { label: 'Home', href: '/' }
-              // ...
-            ].map((item) => (
-              <li key={item.href}>
-                <Link className={navLinkClassName} href={item.href}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul> */}
         </div>
         <div className="flex items-center gap-3">
           <Link

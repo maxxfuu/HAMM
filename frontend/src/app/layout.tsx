@@ -11,7 +11,7 @@ import { Header } from './_components/header';
 
 import './globals.css';
 
-import { GridBackground } from './_components/grid-background';
+import { BackgroundEffects } from './_components/background-effects';
 
 export const metadata: Metadata = {
   title: {
@@ -29,7 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           GeistSans.variable
         )}
       >
-        <GridBackground />
+        <BackgroundEffects />
         <AuthProvider authUrl={env.NEXT_PUBLIC_AUTH_URL}>
           <Header />
           <main className="container flex-1">{children}</main>
