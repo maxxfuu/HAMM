@@ -21,6 +21,10 @@ def send_message(input):
             #media_url=['https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg'],
             to='+1877780436'
         )
+ 
+    
+    return print(message.sid) 
 
-    print(message.sid) 
+message = input("What is your message")
 
+send_message(message)
