@@ -12,6 +12,12 @@ import { cache } from 'react';
 
 import { AutoRefresher } from '@/components/auto-refresher';
 import { Time } from '@/components/time';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
@@ -99,22 +105,33 @@ export default async function MeetingDataPage({
         </div>
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        <Card className="md:col-span-8">
+        <Card className="h-fit md:col-span-8">
           <CardHeader>
             <CardTitle>Summary</CardTitle>
-            <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardContent>
             <p>Card Content</p>
           </CardContent>
         </Card>
         <Card className="md:col-span-4">
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle>Definitions</CardTitle>
-            <CardDescription>Card Description</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="pb-2">
+            <Accordion className="divide-y" type="multiple">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>Is it accessible?</AccordionTrigger>
+                <AccordionContent>
+                  Yes. It adheres to the WAI-ARIA design pattern.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>Is it accessible?</AccordionTrigger>
+                <AccordionContent>
+                  Yes. It adheres to the WAI-ARIA design pattern.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </CardContent>
         </Card>
       </div>
