@@ -1,7 +1,14 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PaperclipIcon, PlusIcon, TagIcon, UserIcon } from 'lucide-react';
+import { useUser } from '@propelauth/nextjs/client';
+import {
+  PaperclipIcon,
+  PhoneIcon,
+  PlusIcon,
+  TagIcon,
+  UserIcon
+} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -25,14 +32,18 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { createMeeting } from '../_actions';
 
 const formSchema = z.object({
   meetingName: z.string().trim().min(1),
   patientName: z.string().trim().min(1),
+  phoneNumber: z.string().trim().length(12).startsWith('+'),
   file: z.instanceof(File, { message: 'Please upload a file!' })
 });
 
 export function UploadDialog() {
+  const { accessToken } = useUser();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,18 +53,30 @@ export function UploadDialog() {
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!accessToken) {
+      toast.error('Access token is missing.');
+      return;
+    }
+
     console.log(values);
+
+    const meetingId = await createMeeting(
+      values.meetingName,
+      values.patientName,
+      values.phoneNumber
+    );
+
     const formData = new FormData();
-    formData.append('meeting_name', values.meetingName);
-    formData.append('patient_name', values.patientName);
+    formData.append('meeting_id', meetingId);
     formData.append('file', values.file);
 
     const response = await fetch('http://localhost:5000/upload', {
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: 'POST',
       body: formData
     });
     if (!response.ok) {
-      throw new Error('Bad response from server');
+      throw new Error('Bad response from backend');
     }
 
     console.log('res', response);
@@ -84,22 +107,22 @@ export function UploadDialog() {
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
+            <FormField
+              name="meetingName"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex">
+                    <TagIcon className="mr-1 size-4" /> Meeting Name
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Symptom evaluation" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="grid grid-cols-2 gap-6">
-              <FormField
-                name="meetingName"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex">
-                      <TagIcon className="mr-1 size-4" /> Meeting Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Symptom evaluation" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 name="patientName"
                 control={form.control}
@@ -110,6 +133,21 @@ export function UploadDialog() {
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="Rick Astley" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="phoneNumber"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex">
+                      <PhoneIcon className="mr-1 size-4" /> Phone Number
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="+12345678910" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
