@@ -33,6 +33,7 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { env } from '@/env';
 import { createMeeting } from '../_actions';
 
 const formSchema = z.object({
@@ -72,16 +73,21 @@ export function UploadDialog() {
     formData.append('meeting_id', meetingId);
     formData.append('file', values.file);
 
-    // const response = await fetch('http://localhost:5000/upload', {
-    //   headers: { Authorization: `Bearer ${accessToken}` },
-    //   method: 'POST',
-    //   body: formData
-    // });
-    // if (!response.ok) {
-    //   throw new Error('Bad response from backend');
-    // }
+    const response = await fetch(
+      (env.NODE_ENV === 'development'
+        ? 'http://localhost:8000'
+        : 'https://hammsandwich.tech') + '/upload',
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        method: 'POST',
+        body: formData
+      }
+    );
+    if (!response.ok) {
+      throw new Error('Bad response from backend');
+    }
 
-    // console.log('res', response);
+    console.log('res', response);
 
     router.push(`/meeting/${meetingId}`);
   };
@@ -133,10 +139,10 @@ export function UploadDialog() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex">
-                      <UserIcon className="mr-1 size-4" /> Patient Name
+                      <UserIcon className="mr-1 size-4" /> Patient MRN
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Rick Astley" {...field} />
+                      <Input placeholder="1482928" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
