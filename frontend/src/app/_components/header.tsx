@@ -55,7 +55,7 @@ export async function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger className="rounded-full transition-opacity hover:opacity-80">
                 <Avatar>
-                  <AvatarFallback>
+                  <AvatarFallback className="uppercase">
                     {user.firstName?.charAt(0)}
                     {user.lastName?.charAt(0)}
                   </AvatarFallback>
