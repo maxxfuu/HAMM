@@ -1,9 +1,12 @@
 import { generateCodeVerifier, generateState } from 'arctic';
+import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { zoom } from '@/lib/auth';
+
+export const metadata: Metadata = { title: 'Connect' };
 
 export default function ZoomConnectPage() {
   async function redirectUser() {
