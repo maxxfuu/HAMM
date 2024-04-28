@@ -8,6 +8,7 @@ import {
   WrenchIcon
 } from 'lucide-react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { CopyButton } from '@/components/copy-button';
 import {
@@ -21,7 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -101,9 +102,12 @@ export default async function DashboardPage() {
                   Random placeholder
                 </TableCell>
                 <TableCell className="space-x-2 whitespace-nowrap text-right">
-                  <Button variant="outline">
+                  <Link
+                    className={buttonVariants({ variant: 'outline' })}
+                    href={`/meeting/${1}`}
+                  >
                     <EyeIcon className="mr-2 size-4" /> View
-                  </Button>
+                  </Link>
                   <CopyButton text="adsklasd" />
                   <AlertDialog>
                     <AlertDialogTrigger asChild>

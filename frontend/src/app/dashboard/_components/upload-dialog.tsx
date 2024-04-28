@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from 'lucide-react';
+import { PaperclipIcon, PlusIcon, TagIcon, UserIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -69,6 +69,7 @@ export function UploadDialog() {
       <DialogContent>
         <Form {...form}>
           <form
+            className="contents"
             onSubmit={form.handleSubmit((values) =>
               toast.promise(handleSubmit(values), {
                 loading: 'Please wait...',
@@ -76,7 +77,6 @@ export function UploadDialog() {
                 success: () => 'Your meeting has been submitted for processing!'
               })
             )}
-            className="contents"
           >
             <DialogHeader>
               <DialogTitle>Upload new meeting</DialogTitle>
@@ -84,39 +84,48 @@ export function UploadDialog() {
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-            <FormField
-              name="meetingName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Meeting Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="patientName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Patient Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-6">
+              <FormField
+                name="meetingName"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex">
+                      <TagIcon className="mr-1 size-4" /> Meeting Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Symptom evaluation" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="patientName"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex">
+                      <UserIcon className="mr-1 size-4" /> Patient Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Rick Astley" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               name="file"
               control={form.control}
               render={({ field: { value, onChange, ...field } }) => {
                 return (
                   <FormItem>
-                    <FormLabel>File (video or audio)</FormLabel>
+                    <FormLabel className="flex">
+                      <PaperclipIcon className="mr-1 size-4" /> File (video or
+                      audio)
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
