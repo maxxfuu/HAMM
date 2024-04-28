@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { Loader2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
 import { AutoRefresher } from '@/components/auto-refresher';
 import { buttonVariants } from '@/components/ui/button';
@@ -14,12 +15,16 @@ interface MeetingDataPageProps {
   };
 }
 
+const getMeeting = cache(async (id: string) =>
+  db.query.meetings.findFirst({
+    where: eq(meetings.id, id)
+  })
+);
+
 export default async function MeetingDataPage({
   params
 }: MeetingDataPageProps) {
-  const meeting = await db.query.meetings.findFirst({
-    where: eq(meetings.id, params.id)
-  });
+  const meeting = await getMeeting(params.id);
   if (!meeting) {
     notFound();
   }
@@ -56,4 +61,12 @@ export default async function MeetingDataPage({
       <p>Meeting id: {params.id}</p>
     </div>
   );
+}
+
+export async function generateMetadata({ params }: MeetingDataPageProps) {
+  const meeting = await getMeeting(params.id);
+  if (!meeting) {
+    notFound();
+  }
+  return { title: meeting.name };
 }
